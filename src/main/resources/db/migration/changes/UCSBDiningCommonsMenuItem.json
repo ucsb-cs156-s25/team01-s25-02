@@ -2,16 +2,16 @@
     "databaseChangeLog": [
       {
         "changeSet": {
-          "id": "UCSBDiningCommonsMenuItems-1",
+          "id": "UCSBDiningCommonsMenuItem-1",
           "author": "Xinyan",
           "preConditions": [
             { "onFail": "MARK_RAN" },
-            { "not": [{ "tableExists": { "tableName": "UCSBDININGCOMMONSMENUITEMS" } }] }
+            { "not": [{ "tableExists": { "tableName": "UCSBDININGCOMMONSMENUITEM" } }] }
           ],
           "changes": [
             {
               "createTable": {
-                "tableName": "UCSBDININGCOMMONSMENUITEMS",
+                "tableName": "UCSBDININGCOMMONSMENUITEM",
                 "columns": [
                   {
                     "column": {
@@ -20,7 +20,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "UCSBDININGCOMMONSMENUITEMS_PK"
+                        "primaryKeyName": "UCSBDININGCOMMONSMENUITEM_PK"
                       }
                     }
                   },
