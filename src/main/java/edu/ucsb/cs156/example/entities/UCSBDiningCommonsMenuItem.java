@@ -20,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity(name = "ucsbdiningcommonsmenuitem")
 public class UCSBDiningCommonsMenuItem {
   @Id
+  private Long id;
   private String diningCommonsCode;
   private String name;
   private String station;
