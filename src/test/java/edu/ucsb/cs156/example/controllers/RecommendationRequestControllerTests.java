@@ -75,7 +75,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
 
         // // Tests with mocks for database actions
 
-         @WithMockUser(roles = { "USER" })
+        @WithMockUser(roles = { "USER" })
         @Test
         public void logged_in_user_can_get_all_recommendation_requests() throws Exception {
 
@@ -89,7 +89,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                                 .explanation("sample explanation 1")
                                 .dateRequested(ldt1)
                                 .dateNeeded(ldt2)
-                                .done(false)
+                                .done(true)
                                 .build();
 
                 ArrayList<RecommendationRequest> expectedRequests = new ArrayList<>();
@@ -123,16 +123,17 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                                 .explanation("sample explanation 1")
                                 .dateRequested(ldt1)
                                 .dateNeeded(ldt2)
-                                .done(false)
+                                .done(true)
                                 .build();
 
                 when(recommendationRequestRepository.save(eq(recommendationRequest1))).thenReturn(recommendationRequest1);
 
                 // act
                 MvcResult response = mockMvc.perform(
-                                post("/api/recommendationrequests/post?requesterEmail=evania@ucsb.edu&professorEmail=sample1@ucsb.edu&explanation=sample explanation 1&dateRequested=2022-01-03T00:00:00&dateNeeded=2022-03-11T00:00:00&done=false")
+                                post("/api/recommendationrequests/post?requesterEmail=evania@ucsb.edu&professorEmail=sample1@ucsb.edu&explanation=sample explanation 1&dateRequested=2022-01-03T00:00:00&dateNeeded=2022-03-11T00:00:00&done=true")
                                                 .with(csrf()))
-                                .andExpect(status().isOk()).andReturn();
+                                .andExpect(status().isOk())
+                                .andReturn();
 
                 // assert
                 verify(recommendationRequestRepository, times(1)).save(recommendationRequest1);
