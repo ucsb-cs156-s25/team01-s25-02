@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "HelpRequest")
+@Entity(name = "HELPREQUEST")
 public class HelpRequest {
 
     @Id

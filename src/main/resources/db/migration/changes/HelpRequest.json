@@ -3,7 +3,7 @@
       {
         "changeSet": {
           "id": "HelpRequest-1",
-          "author": "Ayala",
+          "author": "AyalaWang",
           "preConditions": [
             {
               "onFail": "MARK_RAN"
@@ -12,7 +12,7 @@
               "not": [
                 {
                   "tableExists": {
-                    "tableName": "HELP_REQUEST"
+                    "tableName": "HELPREQUEST"
                   }
                 }
               ]
@@ -21,7 +21,7 @@
           "changes": [
             {
               "createTable": {
-                "tableName": "HELP_REQUEST",
+                "tableName": "HELPREQUEST",
                 "columns": [
                   {
                     "column": {
@@ -30,7 +30,7 @@
                       "autoIncrement": true,
                       "constraints": {
                         "primaryKey": true,
-                        "primaryKeyName": "HELP_REQUEST_PK"
+                        "primaryKeyName": "HELPREQUEST_PK"
                       }
                     }
                   },
