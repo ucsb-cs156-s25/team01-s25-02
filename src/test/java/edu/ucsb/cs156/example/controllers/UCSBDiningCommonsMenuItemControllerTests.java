@@ -8,6 +8,7 @@ import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -191,5 +193,50 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
     String responseString = response.getResponse().getContentAsString();
     assertEquals("UCSBDiningCommonsMenuItem with id 1 not found", responseToJson(response).get("message"));
 }
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
+  public void admin_can_delete_item() throws Exception {
+    // arrange
+    UCSBDiningCommonsMenuItem item = UCSBDiningCommonsMenuItem.builder()
+        .diningCommonsCode("ortega")
+        .name("Pizza")
+        .station("Pizza Station")
+        .build();
+
+    when(repository.findById(15L)).thenReturn(Optional.of(item));
+
+    // act
+    MvcResult response = mockMvc.perform(
+        delete("/api/ucsbdiningcommonsmenuitem?id=15")
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andReturn();
+
+    // assert
+    verify(repository, times(1)).findById(15L);
+    verify(repository, times(1)).delete(item);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("UCSBDiningCommonsMenuItem with id 15 deleted", json.get("message"));
+}
+
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
+  public void admin_cannot_delete_nonexistent_item() throws Exception {
+    // arrange
+    when(repository.findById(15L)).thenReturn(Optional.empty());
+
+    // act
+    MvcResult response = mockMvc.perform(
+        delete("/api/ucsbdiningcommonsmenuitem?id=15")
+            .with(csrf()))
+        .andExpect(status().isNotFound())
+        .andReturn();
+
+    // assert
+    verify(repository, times(1)).findById(15L);
+    Map<String, Object> json = responseToJson(response);
+    assertEquals("UCSBDiningCommonsMenuItem with id 15 not found", json.get("message"));
+}
+
 
 }
