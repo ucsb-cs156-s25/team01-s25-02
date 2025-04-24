@@ -55,13 +55,13 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
     }
 
 
-    // @Test
-    // public void logged_out_users_cannot_get_by_id() throws Exception {
-    //         mockMvc.perform(get("/api/ucsbdiningcommons?code=carrillo"))
-    //                         .andExpect(status().is(403)); // logged out users can't get by id
-    // }
+    @Test
+    public void logged_out_users_cannot_get_by_id() throws Exception {
+            mockMvc.perform(get("/api/ucsborganizations?orgCode=carrillo"))
+                            .andExpect(status().is(403)); // logged out users can't get by id
+    }
 
-    // Authorization tests for /api/ucsbdiningcommons/post
+    // Authorization tests for /api/ucsborganizations/post
     // (Perhaps should also have these for put and delete)
 
     @Test
@@ -79,55 +79,53 @@ public class UCSBOrganizationControllerTests extends ControllerTestCase {
 
     // Tests with mocks for database actions
 
-        // @WithMockUser(roles = { "USER" })
-        // @Test
-        // public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
 
-        //         // arrange
+                // arrange
 
-        //         UCSBDiningCommons commons = UCSBDiningCommons.builder()
-        //                         .name("Carrillo")
-        //                         .code("carrillo")
-        //                         .hasSackMeal(false)
-        //                         .hasTakeOutMeal(false)
-        //                         .hasDiningCam(true)
-        //                         .latitude(34.409953)
-        //                         .longitude(-119.85277)
-        //                         .build();
+                UCSBOrganization org = UCSBOrganization.builder()
+                        .orgCode("123")
+                        .orgTranslationShort("ZETA PHI RHO")
+                        .orgTranslation("ZETA PHI RHO")
+                        .inactive(false)
+                        .build();
+                
 
-        //         when(ucsbDiningCommonsRepository.findById(eq("carrillo"))).thenReturn(Optional.of(commons));
+                when(ucsbOrganizationRepository.findById(eq("123"))).thenReturn(Optional.of(org));
 
-        //         // act
-        //         MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommons?code=carrillo"))
-        //                         .andExpect(status().isOk()).andReturn();
+                // act
+                MvcResult response = mockMvc.perform(get("/api/ucsborganizations?orgCode=123"))
+                                .andExpect(status().isOk()).andReturn();
 
-        //         // assert
+                // assert
 
-        //         verify(ucsbDiningCommonsRepository, times(1)).findById(eq("carrillo"));
-        //         String expectedJson = mapper.writeValueAsString(commons);
-        //         String responseString = response.getResponse().getContentAsString();
-        //         assertEquals(expectedJson, responseString);
-        // }
+                verify(ucsbOrganizationRepository, times(1)).findById(eq("123"));
+                String expectedJson = mapper.writeValueAsString(org);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
 
-        // @WithMockUser(roles = { "USER" })
-        // @Test
-        // public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_does_not_exist() throws Exception {
 
-        //         // arrange
+                // arrange
 
-        //         when(ucsbDiningCommonsRepository.findById(eq("munger-hall"))).thenReturn(Optional.empty());
+                when(ucsbOrganizationRepository.findById(eq("123"))).thenReturn(Optional.empty());
 
-        //         // act
-        //         MvcResult response = mockMvc.perform(get("/api/ucsbdiningcommons?code=munger-hall"))
-        //                         .andExpect(status().isNotFound()).andReturn();
+                // act
+                MvcResult response = mockMvc.perform(get("/api/ucsborganizations?orgCode=123"))
+                                .andExpect(status().isNotFound()).andReturn();
 
-        //         // assert
+                // assert
 
-        //         verify(ucsbDiningCommonsRepository, times(1)).findById(eq("munger-hall"));
-        //         Map<String, Object> json = responseToJson(response);
-        //         assertEquals("EntityNotFoundException", json.get("type"));
-        //         assertEquals("UCSBDiningCommons with id munger-hall not found", json.get("message"));
-        // }
+                verify(ucsbOrganizationRepository, times(1)).findById(eq("123"));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("UCSBOrganization with id 123 not found", json.get("message"));
+        }
 
         @WithMockUser(roles = { "USER" })
         @Test

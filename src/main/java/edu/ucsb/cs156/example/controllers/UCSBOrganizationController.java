@@ -1,6 +1,5 @@
 package edu.ucsb.cs156.example.controllers;
 
-import edu.ucsb.cs156.example.entities.UCSBDiningCommons;
 import edu.ucsb.cs156.example.entities.UCSBOrganization;
 import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.UCSBOrganizationRepository;
@@ -45,6 +44,22 @@ public class UCSBOrganizationController extends ApiController {
     public Iterable<UCSBOrganization> allOrgs() {
         Iterable<UCSBOrganization> orgs = ucsbOrganizationsRepository.findAll();
         return orgs;
+    }
+
+    /**
+     * This method returns a single organization.
+     * @param orgCode code of the organization
+     * @return a single organization
+     */
+    @Operation(summary= "Get a single organization")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public UCSBOrganization getById(
+            @Parameter(name="orgCode") @RequestParam String orgCode) {
+                UCSBOrganization org = ucsbOrganizationsRepository.findById(orgCode)
+                .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+
+        return org;
     }
 
     /**
@@ -93,4 +108,32 @@ public class UCSBOrganizationController extends ApiController {
         ucsbOrganizationsRepository.delete(org);
         return genericMessage("UCSBOrganization with id %s deleted".formatted(orgCode));
     }
+
+    /**
+     * Update a single organization. Accessible only to users with the role "ROLE_ADMIN".
+     * @param orgCode code of the organization
+     * @param incoming the new org contents
+     * @return the updated org object
+     */
+    // @Operation(summary= "Update a single organization")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @PutMapping("")
+    // public UCSBOrganization updateOrgs(
+    //         @Parameter(name="orgCode") @RequestParam String orgCode,
+    //         @RequestBody @Valid UCSBOrganization incoming) {
+
+    //             UCSBOrganization org = ucsbOrganizationsRepository.findById(orgCode)
+    //             .orElseThrow(() -> new EntityNotFoundException(UCSBOrganization.class, orgCode));
+
+
+    //             org.setOrgCode(incoming.getOrgCode());  
+    //             org.setOrgTranslationShort(incoming.getOrgTranslationShort());
+    //             org.setOrgTranslation(incoming.getOrgTranslation());
+    //             org.setInactive(incoming.getInactive());
+        
+
+    //     ucsbOrganizationsRepository.save(org);
+
+    //     return org;
+    // }
 }
