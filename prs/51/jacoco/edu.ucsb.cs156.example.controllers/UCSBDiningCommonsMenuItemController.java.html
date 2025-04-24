@@ -79,6 +79,25 @@ import java.time.LocalDateTime;
 <span class="fc" id="L79">        return ucsbDiningCommonsMenuItemRepository.findById(id)</span>
 <span class="fc" id="L80">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
 }
+    @Operation(summary= &quot;Update a single UCSBDiningCommonsMenuItem&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+        public UCSBDiningCommonsMenuItem updateUCSBDiningCommonsMenuItem(
+        @Parameter(name=&quot;id&quot;) @RequestParam Long id,
+        @RequestBody @Valid UCSBDiningCommonsMenuItem incoming
+        ) {
+<span class="fc" id="L89">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
+<span class="fc" id="L90">                .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+
+<span class="fc" id="L92">            item.setDiningCommonsCode(incoming.getDiningCommonsCode());</span>
+<span class="fc" id="L93">            item.setName(incoming.getName());</span>
+<span class="fc" id="L94">            item.setStation(incoming.getStation());</span>
+
+<span class="fc" id="L96">            ucsbDiningCommonsMenuItemRepository.save(item);</span>
+
+<span class="fc" id="L98">            return item;</span>
+        }
+
 
 
    
