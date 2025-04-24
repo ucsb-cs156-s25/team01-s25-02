@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 /** 
  * This is a JPA entity that represents a UCSBOrganizations
  * 
- * A UCSBOrganizations is a representation of an organization at UCSB.
+ * A UCSBOrganization is a representation of an organization at UCSB.
  */
 
 @Data
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity(name = "ucsborganizations")
-public class UCSBOrganizations {
+public class UCSBOrganization {
   @Id
   private String orgCode;
   private String orgTranslationShort;
