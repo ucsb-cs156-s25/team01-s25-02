@@ -75,6 +75,9 @@ public class RecommendationRequestController extends ApiController {
             @Parameter(name="done") @RequestParam boolean done)
             throws JsonProcessingException {
 
+        log.info("dateRequested={}", dateRequested);
+        log.info("dateNeeded={}", dateNeeded);
+
         RecommendationRequest recommendationRequest = new RecommendationRequest();
         recommendationRequest.setRequesterEmail(requesterEmail);
         recommendationRequest.setProfessorEmail(professorEmail);
@@ -83,8 +86,8 @@ public class RecommendationRequestController extends ApiController {
         recommendationRequest.setDateNeeded(dateNeeded);
         recommendationRequest.setDone(done);
 
-        RecommendationRequest savedRecommendationRequests = recommendationRequestRepository.save(recommendationRequest);
+        RecommendationRequest savedRecommendationRequest = recommendationRequestRepository.save(recommendationRequest);
 
-        return savedRecommendationRequests;
+        return savedRecommendationRequest;
     }
 }
