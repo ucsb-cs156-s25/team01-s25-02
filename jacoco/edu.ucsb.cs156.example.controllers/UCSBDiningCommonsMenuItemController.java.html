@@ -8,13 +8,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 
 import jakarta.validation.Valid;
 
@@ -31,8 +35,8 @@ import java.time.LocalDateTime;
 @Tag(name = &quot;UCSBDiningCommonsMenuItem&quot;)
 @RequestMapping(&quot;/api/ucsbdiningcommonsmenuitem&quot;)
 @RestController
-<span class="fc" id="L34">@Slf4j</span>
-<span class="fc" id="L35">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
+<span class="fc" id="L38">@Slf4j</span>
+<span class="fc" id="L39">public class UCSBDiningCommonsMenuItemController extends ApiController {</span>
 
     @Autowired
     UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
@@ -42,8 +46,8 @@ import java.time.LocalDateTime;
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;UCSBDiningCommonsMenuItem&gt; allItem() {
-<span class="fc" id="L45">        Iterable&lt;UCSBDiningCommonsMenuItem&gt; menuitem = ucsbDiningCommonsMenuItemRepository.findAll();</span>
-<span class="fc" id="L46">        return menuitem;</span>
+<span class="fc" id="L49">        Iterable&lt;UCSBDiningCommonsMenuItem&gt; menuitem = ucsbDiningCommonsMenuItemRepository.findAll();</span>
+<span class="fc" id="L50">        return menuitem;</span>
     }
 
 
@@ -63,21 +67,21 @@ import java.time.LocalDateTime;
             @Parameter(name = &quot;name&quot;) @RequestParam String name,
             @Parameter(name = &quot;station&quot;) @RequestParam String station) {
 
-<span class="fc" id="L66">        UCSBDiningCommonsMenuItem item = UCSBDiningCommonsMenuItem.builder()</span>
-<span class="fc" id="L67">                .diningCommonsCode(diningCommonsCode)</span>
-<span class="fc" id="L68">                .name(name)</span>
-<span class="fc" id="L69">                .station(station)</span>
-<span class="fc" id="L70">                .build();</span>
+<span class="fc" id="L70">        UCSBDiningCommonsMenuItem item = UCSBDiningCommonsMenuItem.builder()</span>
+<span class="fc" id="L71">                .diningCommonsCode(diningCommonsCode)</span>
+<span class="fc" id="L72">                .name(name)</span>
+<span class="fc" id="L73">                .station(station)</span>
+<span class="fc" id="L74">                .build();</span>
 
-<span class="fc" id="L72">        return ucsbDiningCommonsMenuItemRepository.save(item);</span>
+<span class="fc" id="L76">        return ucsbDiningCommonsMenuItemRepository.save(item);</span>
     }
 
     @Operation(summary= &quot;Get a single menu item by id&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;&quot;)
     public UCSBDiningCommonsMenuItem getById(@RequestParam Long id) {
-<span class="fc" id="L79">        return ucsbDiningCommonsMenuItemRepository.findById(id)</span>
-<span class="fc" id="L80">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+<span class="fc" id="L83">        return ucsbDiningCommonsMenuItemRepository.findById(id)</span>
+<span class="fc" id="L84">            .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
 }
     @Operation(summary= &quot;Update a single UCSBDiningCommonsMenuItem&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
@@ -86,20 +90,20 @@ import java.time.LocalDateTime;
         @Parameter(name=&quot;id&quot;) @RequestParam Long id,
         @RequestBody @Valid UCSBDiningCommonsMenuItem incoming
         ) {
-<span class="fc" id="L89">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
-<span class="fc" id="L90">                .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+<span class="fc" id="L93">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
+<span class="fc" id="L94">                .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
 
-<span class="fc" id="L92">            item.setDiningCommonsCode(incoming.getDiningCommonsCode());</span>
-<span class="fc" id="L93">            item.setName(incoming.getName());</span>
-<span class="fc" id="L94">            item.setStation(incoming.getStation());</span>
+<span class="fc" id="L96">            item.setDiningCommonsCode(incoming.getDiningCommonsCode());</span>
+<span class="fc" id="L97">            item.setName(incoming.getName());</span>
+<span class="fc" id="L98">            item.setStation(incoming.getStation());</span>
 
             try {
-<span class="fc" id="L97">                ucsbDiningCommonsMenuItemRepository.save(item);</span>
-<span class="nc" id="L98">            } catch (Exception e) {</span>
-<span class="nc" id="L99">                log.error(&quot;Error saving UCSBDiningCommonsMenuItem with id {}&quot;, id, e);</span>
-<span class="nc" id="L100">                throw new RuntimeException(&quot;Failed to update UCSBDiningCommonsMenuItem&quot;, e);</span>
-<span class="fc" id="L101">            }</span>
-<span class="fc" id="L102">            return item;</span>
+<span class="fc" id="L101">                ucsbDiningCommonsMenuItemRepository.save(item);</span>
+<span class="fc" id="L102">            } catch (Exception e) {</span>
+<span class="fc" id="L103">                log.error(&quot;Error saving UCSBDiningCommonsMenuItem with id {}&quot;, id, e);</span>
+<span class="fc" id="L104">                throw new RuntimeException(&quot;Failed to update UCSBDiningCommonsMenuItem&quot;, e);</span>
+<span class="fc" id="L105">            }</span>
+<span class="fc" id="L106">            return item;</span>
             
         }
 
@@ -108,12 +112,20 @@ import java.time.LocalDateTime;
     @DeleteMapping(&quot;&quot;)
     public Object deleteUCSBDiningCommonsMenuItem(
             @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L111">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
-<span class="fc" id="L112">                    .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+<span class="fc" id="L115">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
+<span class="fc" id="L116">                    .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
         
-<span class="fc" id="L114">            ucsbDiningCommonsMenuItemRepository.delete(item);</span>
-<span class="fc" id="L115">            return genericMessage(&quot;UCSBDiningCommonsMenuItem with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L118">            ucsbDiningCommonsMenuItemRepository.delete(item);</span>
+<span class="fc" id="L119">            return genericMessage(&quot;UCSBDiningCommonsMenuItem with id %s deleted&quot;.formatted(id));</span>
         }
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity&lt;Object&gt; handleRuntimeException(RuntimeException ex) {
+<span class="fc" id="L123">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="fc" id="L124">                             .body(Map.of(</span>
+                                 &quot;type&quot;, &quot;RuntimeException&quot;,
+<span class="fc" id="L126">                                 &quot;message&quot;, ex.getMessage()</span>
+                             ));
+    }
         
         
 
