@@ -93,9 +93,14 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
             item.setName(incoming.getName());
             item.setStation(incoming.getStation());
 
-            ucsbDiningCommonsMenuItemRepository.save(item);
-
+            try {
+                ucsbDiningCommonsMenuItemRepository.save(item);
+            } catch (Exception e) {
+                log.error("Error saving UCSBDiningCommonsMenuItem with id {}", id, e);
+                throw new RuntimeException("Failed to update UCSBDiningCommonsMenuItem", e);
+            }
             return item;
+            
         }
 
     @Operation(summary = "Delete a UCSBDiningCommonsMenuItem")
