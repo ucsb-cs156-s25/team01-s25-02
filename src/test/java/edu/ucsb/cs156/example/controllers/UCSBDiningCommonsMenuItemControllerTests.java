@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -132,38 +133,72 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
   @WithMockUser(roles = { "ADMIN", "USER" })
   @Test
   public void admin_can_edit_an_existing_item() throws Exception {
-    // arrange
     UCSBDiningCommonsMenuItem originalItem = UCSBDiningCommonsMenuItem.builder()
-            .diningCommonsCode("ortega")
-            .name("Taco")
-            .station("Main")
-            .build();
+        .id(1L)
+        .diningCommonsCode("ortega")
+        .name("Taco")
+        .station("Main")
+        .build();
 
     UCSBDiningCommonsMenuItem editedItem = UCSBDiningCommonsMenuItem.builder()
-            .diningCommonsCode("portola")
-            .name("Pasta")
-            .station("Side")
-            .build();
+        .id(1L)
+        .diningCommonsCode("portola")
+        .name("Pasta")
+        .station("Side")
+        .build();
 
     String requestBody = mapper.writeValueAsString(editedItem);
 
     when(repository.findById(1L)).thenReturn(Optional.of(originalItem));
+    when(repository.save(any())).thenReturn(editedItem);
 
-    // act
     MvcResult response = mockMvc.perform(
-            put("/api/ucsbdiningcommonsmenuitem?id=1")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .characterEncoding("utf-8")
-                    .content(requestBody)
-                    .with(csrf()))
-            .andExpect(status().isOk())
-            .andReturn();
+        put("/api/ucsbdiningcommonsmenuitem?id=1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andReturn();
 
-    // assert
     verify(repository, times(1)).findById(1L);
-    verify(repository, times(1)).save(editedItem);
+    verify(repository, times(1)).save(any());
     assertEquals(requestBody, response.getResponse().getContentAsString());
-}
+  }
+
+  @WithMockUser(roles = { "ADMIN", "USER" })
+  @Test
+  public void test_update_throws_exception_when_save_fails() throws Exception {
+      // arrange
+      UCSBDiningCommonsMenuItem originalItem = UCSBDiningCommonsMenuItem.builder()
+              .diningCommonsCode("ortega")
+              .name("Taco")
+              .station("Main")
+              .build();
+  
+      UCSBDiningCommonsMenuItem updatedItem = UCSBDiningCommonsMenuItem.builder()
+              .diningCommonsCode("portola")
+              .name("Burger")
+              .station("Side")
+              .build();
+  
+      String requestBody = mapper.writeValueAsString(updatedItem);
+  
+      when(repository.findById(1L)).thenReturn(Optional.of(originalItem));
+      when(repository.save(any())).thenThrow(new RuntimeException("Simulated Save Error"));
+  
+      // act + assert
+      mockMvc.perform(
+          put("/api/ucsbdiningcommonsmenuitem?id=1")
+              .contentType(MediaType.APPLICATION_JSON)
+              .characterEncoding("utf-8")
+              .content(requestBody)
+              .with(csrf()))
+          .andExpect(status().isInternalServerError()); 
+  }
+  
+  
+
 
   @WithMockUser(roles = { "ADMIN", "USER" })
   @Test
