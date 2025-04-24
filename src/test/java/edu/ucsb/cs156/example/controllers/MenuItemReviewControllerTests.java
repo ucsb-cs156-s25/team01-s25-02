@@ -207,8 +207,7 @@ public class MenuItemReviewControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "ADMIN", "USER" })
     @Test
-    public void admin_tries_to_delete_non_existant_review_and_gets_right_error_message() throws Exception {
-        // arrange
+    public void admin_tries_to_delete_nonexistent_review_and_gets_right_error_message() throws Exception {
         when(menuItemReviewRepository.findById(eq(15L))).thenReturn(Optional.empty());
 
         // act
