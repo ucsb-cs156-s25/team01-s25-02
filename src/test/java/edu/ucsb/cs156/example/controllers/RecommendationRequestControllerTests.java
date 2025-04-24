@@ -60,7 +60,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
         @Test
         public void logged_out_users_cannot_get_by_id() throws Exception {
                 mockMvc.perform(get("/api/recommendationrequests?id=123"))
-                                .andExpect(status().is(404)); // logged out users can't get by id
+                                .andExpect(status().is(403)); // logged out users can't get by id
         }
 
         // Authorization tests for /api/recommendationrequests/post
@@ -196,7 +196,7 @@ public class RecommendationRequestControllerTests extends ControllerTestCase {
                 verify(recommendationRequestRepository, times(1)).findById(eq(123L));
                 Map<String, Object> json = responseToJson(response);
                 assertEquals("EntityNotFoundException", json.get("type"));
-                assertEquals("id 123 not found", json.get("message"));
+                assertEquals("RecommendationRequest with id 123 not found", json.get("message"));
         }
 
 }
