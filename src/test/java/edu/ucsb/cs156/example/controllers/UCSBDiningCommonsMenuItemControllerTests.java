@@ -8,6 +8,7 @@ import edu.ucsb.cs156.example.repositories.UCSBDiningCommonsMenuItemRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.http.MediaType;
 
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -23,6 +25,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
@@ -95,4 +99,32 @@ public class UCSBDiningCommonsMenuItemControllerTests extends ControllerTestCase
     String actualJson = response.getResponse().getContentAsString();
     assertEquals(expectedJson, actualJson);
   }
+  @Test
+  @WithMockUser(roles = { "USER" })
+  public void test_getById_returns_item_when_exists() throws Exception {
+        UCSBDiningCommonsMenuItem item = UCSBDiningCommonsMenuItem.builder()
+            .diningCommonsCode("ortega")
+            .name("Taco")
+            .station("Main")
+            .build();
+
+        when(repository.findById(1L)).thenReturn(Optional.of(item));
+
+        mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.diningCommonsCode").value("ortega"))
+                .andExpect(jsonPath("$.name").value("Taco"))
+                .andExpect(jsonPath("$.station").value("Main"));
+}
+
+  @Test
+  @WithMockUser(roles = { "USER" })
+  public void test_getById_returns_404_when_not_found() throws Exception {
+        when(repository.findById(999L)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/ucsbdiningcommonsmenuitem?id=999"))
+                .andExpect(status().isNotFound());
+}
+
 }

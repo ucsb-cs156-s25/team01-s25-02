@@ -38,7 +38,7 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
     UCSBDiningCommonsMenuItemRepository ucsbDiningCommonsMenuItemRepository;
 
  
-    @Operation(summary= "List all ucsb dates")
+    @Operation(summary= "List all ucsb dining commons menu items")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<UCSBDiningCommonsMenuItem> allItem() {
@@ -71,6 +71,16 @@ public class UCSBDiningCommonsMenuItemController extends ApiController {
 
         return ucsbDiningCommonsMenuItemRepository.save(item);
     }
+
+    @Operation(summary= "Get a single menu item by id")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public UCSBDiningCommonsMenuItem getById(@RequestParam Long id) {
+        return ucsbDiningCommonsMenuItemRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));
+}
+
+
    
 }
 
