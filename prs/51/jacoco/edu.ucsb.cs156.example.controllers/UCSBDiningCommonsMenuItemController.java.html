@@ -98,6 +98,20 @@ import java.time.LocalDateTime;
 <span class="fc" id="L98">            return item;</span>
         }
 
+    @Operation(summary = &quot;Delete a UCSBDiningCommonsMenuItem&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteUCSBDiningCommonsMenuItem(
+            @Parameter(name = &quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L106">            UCSBDiningCommonsMenuItem item = ucsbDiningCommonsMenuItemRepository.findById(id)</span>
+<span class="fc" id="L107">                    .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDiningCommonsMenuItem.class, id));</span>
+        
+<span class="fc" id="L109">            ucsbDiningCommonsMenuItemRepository.delete(item);</span>
+<span class="fc" id="L110">            return genericMessage(&quot;UCSBDiningCommonsMenuItem with id %s deleted&quot;.formatted(id));</span>
+        }
+        
+        
+
 
 
    
