@@ -82,7 +82,7 @@ public class HelpRequestController extends ApiController {
 
 
         HelpRequest savedHelpRequest = helpRequestRepository.save(hr);
-
+        
         return savedHelpRequest;
     }
     
