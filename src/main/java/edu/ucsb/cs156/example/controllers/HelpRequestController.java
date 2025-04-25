@@ -66,7 +66,7 @@ public class HelpRequestController extends ApiController {
     @PostMapping("/post")
     public HelpRequest postHelpRequest(
             @Parameter(name="requesterEmail") @RequestParam String requesterEmail,
-            @Parameter(name="teamID") @RequestParam String teamId,
+            @Parameter(name="teamId") @RequestParam String teamId,
             @Parameter(name="tableOrBreakoutRoom") @RequestParam String tableOrBreakoutRoom,
             @Parameter(name="solved") @RequestParam boolean solved,
             @Parameter(name="explanation") @RequestParam String explanation,
