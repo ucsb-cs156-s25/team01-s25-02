@@ -150,11 +150,11 @@ import lombok.extern.slf4j.Slf4j;
     @DeleteMapping(&quot;&quot;)
     public Object deleteHelpRequest(
             @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="nc" id="L153">        HelpRequest helpRequest = helpRequestRepository.findById(id)</span>
-<span class="nc" id="L154">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
+<span class="fc" id="L153">        HelpRequest helpRequest = helpRequestRepository.findById(id)</span>
+<span class="fc" id="L154">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
 
-<span class="nc" id="L156">        helpRequestRepository.delete(helpRequest);</span>
-<span class="nc" id="L157">        return genericMessage(&quot;Help Request with id %s deleted&quot;.formatted(id));</span>
+<span class="fc" id="L156">        helpRequestRepository.delete(helpRequest);</span>
+<span class="fc" id="L157">        return genericMessage(&quot;Help Request with id %s deleted&quot;.formatted(id));</span>
     }
 
 }
