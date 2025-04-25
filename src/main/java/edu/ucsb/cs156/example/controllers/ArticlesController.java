@@ -110,46 +110,48 @@ public class ArticlesController extends ApiController {
     }
 
     /**
-     * Delete a UCSBDate
+     * Delete an article
      * 
-     * @param id the id of the date to delete
-     * @return a message indicating the date was deleted
+     * @param id the id of the article to delete
+     * @return a message indicating the article was deleted
      */
-    // @Operation(summary= "Delete a UCSBDate")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @DeleteMapping("")
-    // public Object deleteUCSBDate(
-    //         @Parameter(name="id") @RequestParam Long id) {
-    //     UCSBDate ucsbDate = ucsbDateRepository.findById(id)
-    //             .orElseThrow(() -> new EntityNotFoundException(UCSBDate.class, id));
+    @Operation(summary= "Delete an Article")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("")
+    public Object deleteArticle(
+            @Parameter(name="id") @RequestParam Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
 
-    //     ucsbDateRepository.delete(ucsbDate);
-    //     return genericMessage("UCSBDate with id %s deleted".formatted(id));
-    // }
+        articleRepository.delete(article);
+        return genericMessage("Article with id %s deleted".formatted(id));
+    }
 
     // /**
-    //  * Update a single date
+    //  * Update a single article
     //  * 
-    //  * @param id       id of the date to update
-    //  * @param incoming the new date
-    //  * @return the updated date object
+    //  * @param id       id of the article to update
+    //  * @param incoming the new article
+    //  * @return the updated article object
     //  */
-    // @Operation(summary= "Update a single date")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @PutMapping("")
-    // public UCSBDate updateUCSBDate(
-    //         @Parameter(name="id") @RequestParam Long id,
-    //         @RequestBody @Valid UCSBDate incoming) {
+    @Operation(summary= "Update a single article")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public Article updateArticle(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid Article incoming) {
 
-    //     UCSBDate ucsbDate = ucsbDateRepository.findById(id)
-    //             .orElseThrow(() -> new EntityNotFoundException(UCSBDate.class, id));
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
 
-    //     ucsbDate.setQuarterYYYYQ(incoming.getQuarterYYYYQ());
-    //     ucsbDate.setName(incoming.getName());
-    //     ucsbDate.setLocalDateTime(incoming.getLocalDateTime());
+        article.setTitle(incoming.getTitle());
+        article.setUrl(incoming.getUrl());
+        article.setExplanation(incoming.getExplanation());
+        article.setEmail(incoming.getEmail());
+        article.setDateAdded(incoming.getDateAdded());
 
-    //     ucsbDateRepository.save(ucsbDate);
+        articleRepository.save(article);
 
-    //     return ucsbDate;
-    // }
+        return article;
+    }
 }
