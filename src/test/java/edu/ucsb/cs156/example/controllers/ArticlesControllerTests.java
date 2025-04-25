@@ -271,7 +271,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .title("UCSB calendar")
                                 .url("https://registrar.sa.ucsb.edu/calendars/academic-calendars")
                                 .explanation("official UCSB calendar")
-                                .email("mujia@ucsb.edu")
+                                .email("muji@ucsb.edu")
                                 .dateAdded(ldt2)
                                 .build();
 
@@ -306,7 +306,7 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .title("UCSB calendar")
                                 .url("https://registrar.sa.ucsb.edu/calendars/academic-calendars")
                                 .explanation("official UCSB calendar")
-                                .email("mujia@ucsb.edu")
+                                .email("muji@ucsb.edu")
                                 .dateAdded(ldt1)
                                 .build();
 
