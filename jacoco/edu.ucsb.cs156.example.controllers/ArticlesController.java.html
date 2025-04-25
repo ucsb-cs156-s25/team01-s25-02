@@ -57,19 +57,19 @@ import java.time.LocalDateTime;
     /**
      * Get a single date by id
      * 
-     * @param id the id of the date
-     * @return a UCSBDate
+     * @param id the id of the article
+     * @return an article
      */
-    // @Operation(summary= &quot;Get a single date&quot;)
-    // @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
-    // @GetMapping(&quot;&quot;)
-    // public UCSBDate getById(
-    //         @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-    //     UCSBDate ucsbDate = ucsbDateRepository.findById(id)
-    //             .orElseThrow(() -&gt; new EntityNotFoundException(UCSBDate.class, id));
+    @Operation(summary= &quot;Get a single article&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;&quot;)
+    public Article getById(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L68">        Article article = articleRepository.findById(id)</span>
+<span class="fc" id="L69">                .orElseThrow(() -&gt; new EntityNotFoundException(Article.class, id));</span>
 
-    //     return ucsbDate;
-    // }
+<span class="fc" id="L71">        return article;</span>
+    }
 
     /**
      * Create a new article
