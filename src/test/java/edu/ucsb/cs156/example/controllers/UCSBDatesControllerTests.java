@@ -268,7 +268,7 @@ public class UCSBDatesControllerTests extends ControllerTestCase {
                 when(ucsbDateRepository.findById(eq(67L))).thenReturn(Optional.of(ucsbDateOrig));
 
                 // act
-                MvcResult response = mockMvc.perform(
+                MvcResult response = mockMvc.perform( 
                                 put("/api/ucsbdates?id=67")
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .characterEncoding("utf-8")
