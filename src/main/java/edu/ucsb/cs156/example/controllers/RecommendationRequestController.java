@@ -108,4 +108,51 @@ public class RecommendationRequestController extends ApiController {
 
         return recommendationRequest;
     }
+
+    /**
+     * Update a single request
+     * 
+     * @param id       id of the request to update
+     * @param incoming the new request object
+     * @return the updated request object
+     */
+    @Operation(summary= "Update a single request")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RecommendationRequest updateRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid RecommendationRequest incoming) {
+
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequest.setRequesterEmail(incoming.getRequesterEmail());
+        recommendationRequest.setProfessorEmail(incoming.getProfessorEmail());
+        recommendationRequest.setExplanation(incoming.getExplanation());
+        recommendationRequest.setDateRequested(incoming.getDateRequested());
+        recommendationRequest.setDateNeeded(incoming.getDateNeeded());
+        recommendationRequest.setDone(incoming.getDone());
+
+        recommendationRequestRepository.save(recommendationRequest);
+
+        return recommendationRequest;
+    }
+
+    /**
+     * Delete a single recommendation request
+     * 
+     * @param id the id of the request to delete
+     * @return a message indicating the request was deleted
+     */
+    @Operation(summary= "Delete a single request")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("")
+    public Object deleteRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id) {
+        RecommendationRequest recommendationRequest = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        recommendationRequestRepository.delete(recommendationRequest);
+        return genericMessage("RecommendationRequest with id %s deleted".formatted(id));
+    }
 }
