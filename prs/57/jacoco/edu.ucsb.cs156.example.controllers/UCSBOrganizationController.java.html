@@ -115,26 +115,26 @@ import jakarta.validation.Valid;
      * @param incoming the new org contents
      * @return the updated org object
      */
-    // @Operation(summary= &quot;Update a single organization&quot;)
-    // @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
-    // @PutMapping(&quot;&quot;)
-    // public UCSBOrganization updateOrgs(
-    //         @Parameter(name=&quot;orgCode&quot;) @RequestParam String orgCode,
-    //         @RequestBody @Valid UCSBOrganization incoming) {
+    @Operation(summary= &quot;Update a single organization&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+    public UCSBOrganization updateOrgs(
+            @Parameter(name=&quot;orgCode&quot;) @RequestParam String orgCode,
+            @RequestBody @Valid UCSBOrganization incoming) {
 
-    //             UCSBOrganization org = ucsbOrganizationsRepository.findById(orgCode)
-    //             .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, orgCode));
+<span class="fc" id="L125">                UCSBOrganization org = ucsbOrganizationsRepository.findById(orgCode)</span>
+<span class="fc" id="L126">                .orElseThrow(() -&gt; new EntityNotFoundException(UCSBOrganization.class, orgCode));</span>
 
 
-    //             org.setOrgCode(incoming.getOrgCode());  
-    //             org.setOrgTranslationShort(incoming.getOrgTranslationShort());
-    //             org.setOrgTranslation(incoming.getOrgTranslation());
-    //             org.setInactive(incoming.getInactive());
+<span class="fc" id="L129">                org.setOrgCode(incoming.getOrgCode());  </span>
+<span class="fc" id="L130">                org.setOrgTranslationShort(incoming.getOrgTranslationShort());</span>
+<span class="fc" id="L131">                org.setOrgTranslation(incoming.getOrgTranslation());</span>
+<span class="fc" id="L132">                org.setInactive(incoming.getInactive());</span>
         
 
-    //     ucsbOrganizationsRepository.save(org);
+<span class="fc" id="L135">        ucsbOrganizationsRepository.save(org);</span>
 
-    //     return org;
-    // }
+<span class="fc" id="L137">        return org;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
