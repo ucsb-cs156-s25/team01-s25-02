@@ -66,7 +66,7 @@ import lombok.extern.slf4j.Slf4j;
     @PostMapping(&quot;/post&quot;)
     public HelpRequest postHelpRequest(
             @Parameter(name=&quot;requesterEmail&quot;) @RequestParam String requesterEmail,
-            @Parameter(name=&quot;teamID&quot;) @RequestParam String teamId,
+            @Parameter(name=&quot;teamId&quot;) @RequestParam String teamId,
             @Parameter(name=&quot;tableOrBreakoutRoom&quot;) @RequestParam String tableOrBreakoutRoom,
             @Parameter(name=&quot;solved&quot;) @RequestParam boolean solved,
             @Parameter(name=&quot;explanation&quot;) @RequestParam String explanation,
