@@ -57,11 +57,11 @@ public class ArticlesControllerTests extends ControllerTestCase {
                                 .andExpect(status().is(200)); // logged
         }
 
-        // @Test
-        // public void logged_out_users_cannot_get_by_id() throws Exception {
-        //         mockMvc.perform(get("/api/articles?id=7"))
-        //                         .andExpect(status().is(403)); // logged out users can't get by id
-        // }
+        @Test
+        public void logged_out_users_cannot_get_by_id() throws Exception {
+                mockMvc.perform(get("/api/articles?id=7"))
+                                .andExpect(status().is(403)); // logged out users can't get by id
+        }
 
         // Authorization tests for /api/articles/post
         // (Perhaps should also have these for put and delete)
@@ -81,32 +81,52 @@ public class ArticlesControllerTests extends ControllerTestCase {
 
         // // Tests with mocks for database actions
 
-        // @WithMockUser(roles = { "USER" })
-        // @Test
-        // public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_exists() throws Exception {
 
-        //         // arrange
-        //         LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
+                // arrange
+                LocalDateTime ldt = LocalDateTime.parse("2022-01-03T00:00:00");
 
-        //         UCSBDate ucsbDate = UCSBDate.builder()
-        //                         .name("firstDayOfClasses")
-        //                         .quarterYYYYQ("20222")
-        //                         .localDateTime(ldt)
-        //                         .build();
+                Article article = Article.builder()
+                                .title("UCSB website")
+                                .url("https://www.ucsb.edu")
+                                .explanation("official UCSB website")
+                                .email("mujia@ucbs.edu")
+                                .dateAdded(ldt)
+                                .build();
 
-        //         when(ucsbDateRepository.findById(eq(7L))).thenReturn(Optional.of(ucsbDate));
+                when(articleRepository.findById(eq(7L))).thenReturn(Optional.of(article));
 
-        //         // act
-        //         MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
-        //                         .andExpect(status().isOk()).andReturn();
+                // act
+                MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
+                                .andExpect(status().isOk()).andReturn();
 
-        //         // assert
+                // assert
 
-        //         verify(ucsbDateRepository, times(1)).findById(eq(7L));
-        //         String expectedJson = mapper.writeValueAsString(ucsbDate);
-        //         String responseString = response.getResponse().getContentAsString();
-        //         assertEquals(expectedJson, responseString);
-        // }
+                verify(articleRepository, times(1)).findById(eq(7L));
+                String expectedJson = mapper.writeValueAsString(article);
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedJson, responseString);
+        }
+
+        @WithMockUser(roles = { "USER" })
+        @Test
+        public void test_that_logged_in_user_can_get_by_id_when_the_id_not_exists() throws Exception {
+
+                when(articleRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+                // act
+                MvcResult response = mockMvc.perform(get("/api/articles?id=7"))
+                                .andExpect(status().isNotFound()).andReturn();
+
+                // assert
+
+                verify(articleRepository, times(1)).findById(eq(7L));
+                Map<String, Object> json = responseToJson(response);
+                assertEquals("EntityNotFoundException", json.get("type"));
+                assertEquals("Article with id 7 not found", json.get("message"));
+        }
 
         // @WithMockUser(roles = { "USER" })
         // @Test

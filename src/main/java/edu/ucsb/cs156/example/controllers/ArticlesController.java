@@ -57,19 +57,19 @@ public class ArticlesController extends ApiController {
     /**
      * Get a single date by id
      * 
-     * @param id the id of the date
-     * @return a UCSBDate
+     * @param id the id of the article
+     * @return an article
      */
-    // @Operation(summary= "Get a single date")
-    // @PreAuthorize("hasRole('ROLE_USER')")
-    // @GetMapping("")
-    // public UCSBDate getById(
-    //         @Parameter(name="id") @RequestParam Long id) {
-    //     UCSBDate ucsbDate = ucsbDateRepository.findById(id)
-    //             .orElseThrow(() -> new EntityNotFoundException(UCSBDate.class, id));
+    @Operation(summary= "Get a single article")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public Article getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(Article.class, id));
 
-    //     return ucsbDate;
-    // }
+        return article;
+    }
 
     /**
      * Create a new article
