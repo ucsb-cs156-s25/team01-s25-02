@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
  @Tag(name = "HELPREQUEST")
- @RequestMapping("/api/HELPREQUEST")
+ @RequestMapping("/api/helprequest")
  @RestController
  @Slf4j
 public class HelpRequestController extends ApiController { 
