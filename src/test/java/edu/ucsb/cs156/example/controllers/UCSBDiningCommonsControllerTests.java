@@ -44,7 +44,7 @@ public class UCSBDiningCommonsControllerTests extends ControllerTestCase {
 
         @Test
         public void logged_out_users_cannot_get_all() throws Exception {
-                mockMvc.perform(get("/api/ucsbdiningcommons/all"))
+                mockMvc.perform(get( "/api/ucsbdiningcommons/all"))
                                 .andExpect(status().is(403)); // logged out users can't get all
         }
 
